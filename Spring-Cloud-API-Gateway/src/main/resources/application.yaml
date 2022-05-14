@@ -1,0 +1,24 @@
+server:
+  port: 9090
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+
+        - id: go-example
+          uri: lb://go-example/**
+          predicates:
+            - Path=/go-example/**
+            - Method=GET,PUT,DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/go-example/(?<segment>.*), /$\{segment}
